@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"google.golang.org/api/iterator"
 )
 
 type (
@@ -132,6 +133,7 @@ func newCallFromExecutor(executor func(context.Context) (ResultStream, error), q
 			close(c.done)
 			return
 		}
+		defer iter.Close()
 
 		// set iterator to result
 		err = c.result.setIter(iter, func() { c.setState(CallStateRetrieving) })
